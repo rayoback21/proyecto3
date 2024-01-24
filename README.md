@@ -1,73 +1,102 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+/* eslint-disable prettier/prettier */
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+const axios = require('axios');
+const nodeFetch = require('node-fetch');
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+async function axiosRequest(url) {
+  const response = await axios.get(url);
+  return response.data;
+}
 
-## Installation
 
-```bash
-$ npm install
-```
+async function fetchRequest(url) {
+  const response = await nodeFetch(url);
+  return await response.json();
+}
 
-## Running the app
+async function makeHttpRequest(requestFunction, url) {
+  try {
+    const result = await requestFunction(url);
+    console.log(result);
+  } catch (error) {
+    console.error('Error al realizar la solicitud:', error.message);
+  }
+}
 
-```bash
-# development
-$ npm run start
+const apiUrl = 'https://rickandmortyapi.com/';
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+makeHttpRequest(axiosRequest, apiUrl);
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+makeHttpRequest(fetchRequest, apiUrl);
 
-# e2e tests
-$ npm run test:e2e
+ 
+}
 
-# test coverage
-$ npm run test:cov
-```
+es un ejemplo de cómo realizar solicitudes HTTP en NestJS. El código comienza desactivando el formateo automático del código por Prettier. Luego, importa los decoradores y servicios necesarios de NestJS.
 
-## Support
+El siguiente paso es definir la clase AppController, que actúa como un controlador en NestJS. La clase AppController tiene un constructor que recibe un servicio AppService como parámetro.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+A continuación, se importan las bibliotecas axios y node-fetch. axios se utiliza para realizar solicitudes HTTP utilizando Promesas, mientras que node-fetch es un módulo de Node.js que implementa la interfaz de la función fetch, comúnmente utilizada en el navegador.
 
-## Stay in touch
+Luego, se definen dos funciones asincrónicas: axiosRequest y fetchRequest. Estas funciones realizan una solicitud GET utilizando axios y node-fetch, respectivamente.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Finalmente, se define una función asincrónica makeHttpRequest que realiza una solicitud utilizando la función proporcionada y maneja cualquier error que pueda ocurrir durante la solicitud.
 
-## License
+El código utiliza las funciones definidas anteriormente para realizar dos solicitudes HTTP a la API de Rick and Morty. Los resultados de las solicitudes se registran en la consola, y cualquier error que ocurra durante la solicitud se maneja e imprime en la consola.
 
-Nest is [MIT licensed](LICENSE).
+Aquí hay una explicación más detallada de cada línea de código:
+
+/* eslint-disable prettier/prettier */
+Esta línea desactiva el formateo automático del código por Prettier.
+
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+Estas líneas importan decoradores y servicios necesarios de NestJS. Controller es un decorador para definir un controlador, y Get se utiliza para especificar que el método manejará solicitudes HTTP GET. Además, se importa el servicio AppService, que probablemente se use para realizar operaciones específicas en la lógica de la aplicación.
+
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+}
+Aquí se define la clase AppController, que actúa como un controlador en NestJS. Se utiliza el decorador @Controller() para indicar que esta clase es un controlador.
+
+const axios = require('axios');
+const nodeFetch = require('node-fetch');
+Se importan las bibliotecas axios y node-fetch. axios se utiliza para realizar solicitudes HTTP utilizando Promesas, mientras que node-fetch es un módulo de Node.js que implementa la interfaz de la función fetch, comúnmente utilizada en el navegador.
+
+async function axiosRequest(url) {
+  const response = await axios.get(url);
+  return response.data;
+}
+Se define una función asincrónica axiosRequest que toma una URL como parámetro, realiza una solicitud GET utilizando axios y devuelve los datos de la respuesta.
+
+async function fetchRequest(url) {
+  const response = await nodeFetch(url);
+  return await response.json();
+}
+Se define una función asincrónica fetchRequest que toma una URL como parámetro, realiza una solicitud utilizando node-fetch y devuelve los datos de la respuesta en formato JSON.
+
+async function makeHttpRequest(requestFunction, url) {
+  try {
+    const result = await requestFunction(url);
+    console.log(result);
+  } catch (error) {
+    console.error('Error al realizar la solicitud:', error.message);
+  }
+}
+Se define una función asincrónica makeHttpRequest que toma una función de solicitud (requestFunction) y una URL como parámetros. La función realiza la solicitud utilizando la función proporcionada y maneja cualquier error que pueda ocurrir durante la solicitud.
+
+const apiUrl = 'https://rickandmortyapi.com/';
+Se define una constante apiUrl que contiene la URL base para realizar las solicitudes a la API de Rick and Morty.
+
+makeHttpRequest(axiosRequest, apiUrl);
+makeHttpRequest(fetchRequest, apiUrl);
+Se realizan dos solicitudes HTTP utilizando las funciones definidas anteriormente (axiosRequest y fetchRequest). Los resultados de las solicitudes se registran en la consola, y cualquier error que ocurra durante la solicitud se maneja e imprime en la consola.
